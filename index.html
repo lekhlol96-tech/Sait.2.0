@@ -23,12 +23,12 @@
             min-height: 100vh;
         }
 
-        /* Основной контейнер стал более прозрачным (0.55 вместо 0.85) */
+        /* Основной контейнер стал полупрозрачным, чтобы проглядывал фон цеха */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             background: rgba(15, 23, 42, 0.55); 
-            backdrop-filter: blur(8px); /* Умеренное размытие, чтобы фон угадывался лучше */
+            backdrop-filter: blur(8px); 
             -webkit-backdrop-filter: blur(8px);
             padding: 25px;
             border-radius: 16px;
@@ -77,7 +77,7 @@
             box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.6);
         }
 
-        /* Кнопки */
+        /* Кнопки управления */
         .btn {
             padding: 12px 20px;
             font-size: 14px;
@@ -114,7 +114,7 @@
         .btn-cancel { background-color: #64748b; }
         .btn-extra { background-color: #f97316; font-size: 14px; padding: 10px 12px; margin-top: 8px; width: 100%; justify-content: center; }
 
-        /* Подложка таблицы теперь максимально прозрачная */
+        /* Подложка таблицы прозрачная */
         .table-wrapper { 
             overflow-x: auto; 
             border-radius: 12px;
@@ -135,7 +135,6 @@
             vertical-align: middle; 
         }
 
-        /* Шапка таблицы слегка затемнена для контраста */
         th { 
             background-color: rgba(15, 23, 42, 0.75); 
             color: #2ecc71; 
@@ -145,7 +144,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Строки при наведении становятся чуть плотнее */
         tr:hover { 
             background-color: rgba(255, 255, 255, 0.08); 
         }
@@ -290,532 +288,117 @@
 </div>
 
 <script>
-    // Подключение вашей актуальной базы данных
+    // Стартовая база данных (если в памяти телефона пусто)
     const defaultData = [
-  {
-    "brand": "08Х14Н5М2О (ЭИ712)",
-    "modes": [{ "diameter": "90 ➔ 70ок", "temp": "1160 °C", "holding": "выд. 20 мин.", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "08Х15Н5Д2Т-Ш (ЭП410-Ш)",
-    "modes": [{ "diameter": "120, 95", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "08Х18Н6АГ10С",
-    "modes": [{ "diameter": "150", "temp": "1160 °C", "holding": "10 мин.", "twoEnds": "—" }]
-  },
-  {
-    "brand": "10Х11Н23Т3МР (ЭП33)",
-    "modes": [
-      { "diameter": "140, 90", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "70", "temp": "1120 °C", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "10Х17Н13М2Т",
-    "modes": [{ "diameter": "100 ➔ 73(52)", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "10Х18Н9",
-    "modes": [{ "diameter": "65", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "12Х13",
-    "modes": [{ "diameter": "65", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "12Х18Н10Т",
-    "modes": [
-      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "14Х17Н2 (ЭИ268)",
-    "modes": [{ "diameter": "120, 115", "temp": "1170 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "15Х12Н2МВФ (ЭП517)",
-    "modes": [
-      { "diameter": "140, 115", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" },
-      { "diameter": "95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" },
-      { "diameter": "70", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }
-    ]
-  },
-  {
-    "brand": "18ХГТ",
-    "modes": [
-      { "diameter": "120", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "140", "temp": "1170 °C", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "20Х",
-    "modes": [{ "diameter": "65", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "20Х13",
-    "modes": [
-      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "25Х12Н2В2МФ (ЭИ962)",
-    "modes": [
-      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" },
-      { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }
-    ]
-  },
-  {
-    "brand": "27КХ",
-    "modes": [{ "diameter": "65", "temp": "1100 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "29НК",
-    "modes": [{ "diameter": "130", "temp": "1160 °C", "holding": "40 мин.", "twoEnds": "—" }]
-  },
-  {
-    "brand": "30ХГСА",
-    "modes": [
-      { "diameter": "90", "temp": "1160 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "115", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "32НКД",
-    "modes": [{ "diameter": "130", "temp": "1160 °C", "holding": "40 мин.", "twoEnds": "—" }]
-  },
-  {
-    "brand": "36Н",
-    "modes": [{ "diameter": "65", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "37Х12Н8Г8МФ (ЭИ481)",
-    "modes": [{ "diameter": "155 ➔ 120 ➔ 90", "temp": "1200 °C", "holding": "выд. 15 мин.", "twoEnds": "—" }]
-  },
-  {
-    "brand": "38Х2МЮА",
-    "modes": [{ "diameter": "50", "temp": "1170 °C", "holding": "25 мин.", "twoEnds": "—" }]
-  },
-  {
-    "brand": "40Х",
-    "modes": [{ "diameter": "70, 60, 32", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "40ХН2МА",
-    "modes": [{ "diameter": "70", "temp": "1180 °C", "holding": "15–20 мин.", "twoEnds": "—" }]
-  },
-  {
-    "brand": "43КОФ",
-    "modes": [{ "diameter": "—", "temp": "интервал 1120-880°C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "45",
-    "modes": [{ "diameter": "80", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "47НД",
-    "modes": [
-      { "diameter": "80", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "140 ➔ 100(20)", "temp": "1150 °C", "holding": "выд. 20 мин.", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "49КФ",
-    "modes": [
-      { "diameter": "65", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "110 ➔ 65(31)", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "50Н",
-    "modes": [{ "diameter": "—", "temp": "интервал 1100-850°C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "5ХНМ",
-    "modes": [{ "diameter": "115", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "60С2А",
-    "modes": [{ "diameter": "65", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "65Г",
-    "modes": [{ "diameter": "80", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "9Х1",
-    "modes": [{ "diameter": "115", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "БрОФ7-0.2 (Бронза)",
-    "modes": [{ "diameter": "100➔80; 100➔90; 88➔70", "temp": "400 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ВТ1-0",
-    "modes": [{ "diameter": "60 ➔ 30(12)", "temp": "—", "holding": "40 мин.", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ВТ14",
-    "modes": [{ "diameter": "140➔115; 115➔90(21)", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ВТ16",
-    "modes": [{ "diameter": "140➔115; 115➔90(21)", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ВТ20",
-    "modes": [{ "diameter": "50", "temp": "нет данных", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ВТ22",
-    "modes": [{ "diameter": "140➔115; 115➔90(24)", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ВТ3",
-    "modes": [{ "diameter": "100➔70ок; 115➔87ок", "temp": "—", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ВТ3-1",
-    "modes": [{ "diameter": "60...65", "temp": "нет данных", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ВТ5 / ВТ5-1",
-    "modes": [{ "diameter": "140, 65", "temp": "нет данных", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ВТ6",
-    "modes": [{ "diameter": "120➔95➔65(35,20); 170➔150➔120➔95/100ок", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ВТ6 (Модуль-Т)",
-    "modes": [{ "diameter": "115 ➔ 90 ➔ 62", "temp": "1000 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ВТ8",
-    "modes": [{ "diameter": "115➔90; 140➔115", "temp": "—", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ВТ9",
-    "modes": [{ "diameter": "140 ➔ 110", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "МН19ВП",
-    "modes": [{ "diameter": "140", "temp": "900 °C", "holding": "10 мин.", "twoEnds": "—" }]
-  },
-  {
-    "brand": "МНК",
-    "modes": [{ "diameter": "75", "temp": "800 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "НМЖМц28-2.5-1.5",
-    "modes": [{ "diameter": "65", "temp": "1020 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "НММц38-2В",
-    "modes": [{ "diameter": "140, 70, 65", "temp": "1020 °C", "holding": "10 мин.", "twoEnds": "—" }]
-  },
-  {
-    "brand": "НП2Э",
-    "modes": [{ "diameter": "150 ➔ 105(75)", "temp": "1100 °C", "holding": "выд. 10 мин.", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ОТ4",
-    "modes": [{ "diameter": "135", "temp": "нет данных", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ОТ4-0",
-    "modes": [{ "diameter": "140➔115; 115➔90(21)", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ОТ4-1",
-    "modes": [{ "diameter": "140 ➔ 110(23)", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ПТ-1М",
-    "modes": [{ "diameter": "140➔90; 110➔65(36)", "temp": "—", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ПТ-3В",
-    "modes": [{ "diameter": "150...155 ➔ 120 ➔ 95(65)", "temp": "—", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ПТ-7М",
-    "modes": [{ "diameter": "115➔90(21); 140➔115", "temp": "—", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "Р6М5",
-    "modes": [
-      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" },
-      { "diameter": "115", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }
-    ]
-  },
-  {
-    "brand": "У8А",
-    "modes": [{ "diameter": "65", "temp": "1120 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "Х12МФ",
-    "modes": [
-      { "diameter": "130", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" },
-      { "diameter": "90", "temp": "1140 °C", "holding": "—", "twoEnds": "на 2 конца" }
-    ]
-  },
-  {
-    "brand": "Х18Н10Т",
-    "modes": [{ "diameter": "120", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "Х20Н80",
-    "modes": [
-      { "diameter": "140, 95", "temp": "1180 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "70", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "ХН32Т (УР.ПР)",
-    "modes": [{ "diameter": "65 ➔ 30±1ок", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ХН35ВТ (УР.ПР)",
-    "modes": [{ "diameter": "65 ➔ 32(30)", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ХН45Ю",
-    "modes": [{ "diameter": "65", "temp": "нет данных", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ХН50ВМТЮБ",
-    "modes": [{ "diameter": "110➔20(34); 110➔70(37)", "temp": "1200 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ХН60ВТ",
-    "modes": [{ "diameter": "140, 70", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ХН62ВМЮТ (ЭИ867)",
-    "modes": [
-      { "diameter": "140", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" },
-      { "diameter": "115, 95", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }
-    ]
-  },
-  {
-    "brand": "ХН67МВТЮ (ЭП202)",
-    "modes": [{ "diameter": "140, 115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ХН70ВМТЮ",
-    "modes": [{ "diameter": "120 ➔ 90 ➔ 65(33)", "temp": "1170 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ХН70ВМТЮБ",
-    "modes": [{ "diameter": "—", "temp": "интервал 1150-900°C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ХН70Ю",
-    "modes": [{ "diameter": "50", "temp": "нет данных", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ХН73МБТЮ (ЭП698)",
-    "modes": [{ "diameter": "110", "temp": "1140 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ХН77ТЮР",
-    "modes": [{ "diameter": "—", "temp": "интервал 1180-950°C", "holding": "15 мин (145)", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ХН78Т",
-    "modes": [{ "diameter": "70", "temp": "нет данных", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ЧИНХТЮ",
-    "modes": [{ "diameter": "90 ➔ 65(25)", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ШХ15",
-    "modes": [
-      { "diameter": "140", "temp": "1160 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "115", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "ШХ15-В",
-    "modes": [{ "diameter": "65", "temp": "1140 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ЭИ435 (ХН78Т)",
-    "modes": [
-      { "diameter": "140, 95", "temp": "1180 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "120", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "ЭИ437Б (ХН77ТЮР)",
-    "modes": [
-      { "diameter": "140", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" },
-      { "diameter": "115, 95", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }
-    ]
-  },
-  {
-    "brand": "ЭИ69",
-    "modes": [{ "diameter": "50", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ЭИ696",
-    "modes": [{ "diameter": "110 ➔ 65(36)", "temp": "1120 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ЭИ698",
-    "modes": [
-      { "diameter": "140", "temp": "1140 °C", "holding": "—", "twoEnds": "на 2 конца" },
-      { "diameter": "115, 95", "temp": "1120 °C", "holding": "—", "twoEnds": "на 2 конца" }
-    ]
-  },
-  {
-    "brand": "ЭИ811 (12Х21Н5Т)",
-    "modes": [{ "diameter": "140, 95", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ЭИ867",
-    "modes": [
-      { "diameter": "140, 115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" },
-      { "diameter": "70", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }
-    ]
-  },
-  {
-    "brand": "ЭИ893 (ХН65ВМТЮ)",
-    "modes": [{ "diameter": "140, 115, 95", "temp": "1170 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ЭИ943",
-    "modes": [{ "diameter": "—", "temp": "интервал 1140-920°C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ЭИ961 (13Х11Н2В2МФ)",
-    "modes": [
-      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "70", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "ЭИ962 (11Х11Н2В2МФ)",
-    "modes": [
-      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" },
-      { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" },
-      { "diameter": "70", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }
-    ]
-  },
-  {
-    "brand": "ЭП164",
-    "modes": [
-      { "diameter": "160", "temp": "1160 °C", "holding": "15 мин (160)", "twoEnds": "—" },
-      { "diameter": "75, 70", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "ЭП184",
-    "modes": [{ "diameter": "—", "temp": "интервал 1160-950°C", "holding": "15 мин.", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ЭП199",
-    "modes": [
-      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" },
-      { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }
-    ]
-  },
-  {
-    "brand": "ЭП202",
-    "modes": [
-      { "diameter": "140", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" },
-      { "diameter": "115, 95", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }
-    ]
-  },
-  {
-    "brand": "ЭП220 (ХН75ВМЮТ)",
-    "modes": [{ "diameter": "110, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ЭП33",
-    "modes": [
-      { "diameter": "70, 40", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "60, 50", "temp": "1120 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "65", "temp": "1100 °C", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "ЭП410",
-    "modes": [{ "diameter": "140, 120", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ЭП517",
-    "modes": [
-      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" },
-      { "diameter": "115", "temp": "1170 °C", "holding": "—", "twoEnds": "на 2 конца" }
-    ]
-  },
-  {
-    "brand": "ЭП56 (09Х16Н4Б)",
-    "modes": [
-      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "120, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "ЭП567",
-    "modes": [
-      { "diameter": "140", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "95", "temp": "1140 °C", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "ЭП570 (ХН60МЮВТ)",
-    "modes": [{ "diameter": "140, 115, 95", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ЭП637",
-    "modes": [{ "diameter": "70, 52...45", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
-  },
-  {
-    "brand": "ЭП678",
-    "modes": [
-      { "diameter": "50", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "70", "temp": "—", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "ЭП708",
-    "modes": [{ "diameter": "110", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ЭП718 (ХН45МВТЮБ)",
-    "modes": [{ "diameter": "140, 95", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ЭП742",
-    "modes": [{ "diameter": "120", "temp": "1140 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ЭП817",
-    "modes": [
-      { "diameter": "110, 95", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
-      { "diameter": "70", "temp": "1120 °C", "holding": "—", "twoEnds": "—" }
-    ]
-  },
-  {
-    "brand": "ЭП914",
-    "modes": [{ "diameter": "110", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ЭП962",
-    "modes": [{ "diameter": "140", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "115", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  },
-  {
-    "brand": "ЭП975",
-    "modes": [{ "diameter": "110", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
-  }
-];
+      { "brand": "08Х14Н5М2О (ЭИ712)", "modes": [{ "diameter": "90 ➔ 70ок", "temp": "1160 °C", "holding": "выд. 20 мин.", "twoEnds": "на 2 конца" }] },
+      { "brand": "08Х15Н5Д2Т-Ш (ЭП410-Ш)", "modes": [{ "diameter": "120, 95", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "08Х18Н6АГ10С", "modes": [{ "diameter": "150", "temp": "1160 °C", "holding": "10 мин.", "twoEnds": "—" }] },
+      { "brand": "10Х11Н23Т3МР (ЭП33)", "modes": [{ "diameter": "140, 90", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "70", "temp": "1120 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "10Х17Н13М2Т", "modes": [{ "diameter": "100 ➔ 73(52)", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "10Х18Н9", "modes": [{ "diameter": "65", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "12Х13", "modes": [{ "diameter": "65", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "12Х18Н10Т", "modes": [{ "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "14Х17Н2 (ЭИ268)", "modes": [{ "diameter": "120, 115", "temp": "1170 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "15Х12Н2МВФ (ЭП517)", "modes": [{ "diameter": "140, 115", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "70", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "18ХГТ", "modes": [{ "diameter": "120", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "140", "temp": "1170 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "20Х", "modes": [{ "diameter": "65", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "20Х13", "modes": [{ "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "25Х12Н2В2МФ (ЭИ962)", "modes": [{ "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "27КХ", "modes": [{ "diameter": "65", "temp": "1100 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "29НК", "modes": [{ "diameter": "130", "temp": "1160 °C", "holding": "40 мин.", "twoEnds": "—" }] },
+      { "brand": "30ХГСА", "modes": [{ "diameter": "90", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "115", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "32НКД", "modes": [{ "diameter": "130", "temp": "1160 °C", "holding": "40 мин.", "twoEnds": "—" }] },
+      { "brand": "36Н", "modes": [{ "diameter": "65", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "37Х12Н8Г8МФ (ЭИ481)", "modes": [{ "diameter": "155 ➔ 120 ➔ 90", "temp": "1200 °C", "holding": "выд. 15 мин.", "twoEnds": "—" }] },
+      { "brand": "38Х2МЮА", "modes": [{ "diameter": "50", "temp": "1170 °C", "holding": "25 мин.", "twoEnds": "—" }] },
+      { "brand": "40Х", "modes": [{ "diameter": "70, 60, 32", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "40ХН2МА", "modes": [{ "diameter": "70", "temp": "1180 °C", "holding": "15–20 мин.", "twoEnds": "—" }] },
+      { "brand": "43КОФ", "modes": [{ "diameter": "—", "temp": "интервал 1120-880°C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "45", "modes": [{ "diameter": "80", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "47НД", "modes": [{ "diameter": "80", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "140 ➔ 100(20)", "temp": "1150 °C", "holding": "выд. 20 мин.", "twoEnds": "—" }] },
+      { "brand": "49КФ", "modes": [{ "diameter": "65", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "110 ➔ 65(31)", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "50Н", "modes": [{ "diameter": "—", "temp": "интервал 1100-850°C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "5ХНМ", "modes": [{ "diameter": "115", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "60С2А", "modes": [{ "diameter": "65", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "65Г", "modes": [{ "diameter": "80", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "9Х1", "modes": [{ "diameter": "115", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "БрОФ7-0.2 (Бронза)", "modes": [{ "diameter": "100➔80; 100➔90; 88➔70", "temp": "400 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ВТ1-0", "modes": [{ "diameter": "60 ➔ 30(12)", "temp": "—", "holding": "40 мин.", "twoEnds": "—" }] },
+      { "brand": "ВТ14", "modes": [{ "diameter": "140➔115; 115➔90(21)", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ВТ16", "modes": [{ "diameter": "140➔115; 115➔90(21)", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ВТ20", "modes": [{ "diameter": "50", "temp": "нет данных", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ВТ22", "modes": [{ "diameter": "140➔115; 115➔90(24)", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ВТ3", "modes": [{ "diameter": "100➔70ок; 115➔87ок", "temp": "—", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ВТ3-1", "modes": [{ "diameter": "60...65", "temp": "нет данных", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ВТ5 / ВТ5-1", "modes": [{ "diameter": "140, 65", "temp": "нет данных", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ВТ6", "modes": [{ "diameter": "120➔95➔65(35,20); 170➔150➔120➔95/100ок", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ВТ6 (Модуль-Т)", "modes": [{ "diameter": "115 ➔ 90 ➔ 62", "temp": "1000 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ВТ8", "modes": [{ "diameter": "115➔90; 140➔115", "temp": "—", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ВТ9", "modes": [{ "diameter": "140 ➔ 110", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "МН19ВП", "modes": [{ "diameter": "140", "temp": "900 °C", "holding": "10 мин.", "twoEnds": "—" }] },
+      { "brand": "МНК", "modes": [{ "diameter": "75", "temp": "800 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "НМЖМц28-2.5-1.5", "modes": [{ "diameter": "65", "temp": "1020 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "НММц38-2В", "modes": [{ "diameter": "140, 70, 65", "temp": "1020 °C", "holding": "10 мин.", "twoEnds": "—" }] },
+      { "brand": "НП2Э", "modes": [{ "diameter": "150 ➔ 105(75)", "temp": "1100 °C", "holding": "выд. 10 мин.", "twoEnds": "—" }] },
+      { "brand": "ОТ4", "modes": [{ "diameter": "135", "temp": "нет данных", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ОТ4-0", "modes": [{ "diameter": "140➔115; 115➔90(21)", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ОТ4-1", "modes": [{ "diameter": "140 ➔ 110(23)", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ПТ-1М", "modes": [{ "diameter": "140➔90; 110➔65(36)", "temp": "—", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ПТ-3В", "modes": [{ "diameter": "150...155 ➔ 120 ➔ 95(65)", "temp": "—", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ПТ-7М", "modes": [{ "diameter": "115➔90(21); 140➔115", "temp": "—", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "Р6М5", "modes": [{ "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "115", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "У8А", "modes": [{ "diameter": "65", "temp": "1120 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "Х12МФ", "modes": [{ "diameter": "130", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "90", "temp": "1140 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "Х18Н10Т", "modes": [{ "diameter": "120", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "Х20Н80", "modes": [{ "diameter": "140, 95", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "70", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ХН32Т (УР.ПР)", "modes": [{ "diameter": "65 ➔ 30±1ок", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ХН35ВТ (УР.ПР)", "modes": [{ "diameter": "65 ➔ 32(30)", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ХН45Ю", "modes": [{ "diameter": "65", "temp": "нет данных", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ХН50ВМТЮБ", "modes": [{ "diameter": "110➔20(34); 110➔70(37)", "temp": "1200 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ХН60ВТ", "modes": [{ "diameter": "140, 70", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ХН62ВМЮТ (ЭИ867)", "modes": [{ "diameter": "140", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "115, 95", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ХН67МВТЮ (ЭП202)", "modes": [{ "diameter": "140, 115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ХН70ВМТЮ", "modes": [{ "diameter": "120 ➔ 90 ➔ 65(33)", "temp": "1170 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ХН70ВМТЮБ", "modes": [{ "diameter": "—", "temp": "интервал 1150-900°C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ХН70Ю", "modes": [{ "diameter": "50", "temp": "нет данных", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ХН73МБТЮ (ЭП698)", "modes": [{ "diameter": "110", "temp": "1140 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ХН77ТЮР", "modes": [{ "diameter": "—", "temp": "интервал 1180-950°C", "holding": "15 мин (145)", "twoEnds": "на 2 конца" }] },
+      { "brand": "ХН78Т", "modes": [{ "diameter": "70", "temp": "нет данных", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ЧИНХТЮ", "modes": [{ "diameter": "90 ➔ 65(25)", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ШХ15", "modes": [{ "diameter": "140", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "115", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ШХ15-В", "modes": [{ "diameter": "65", "temp": "1140 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ЭИ435 (ХН78Т)", "modes": [{ "diameter": "140, 95", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "120", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ЭИ437Б (ХН77ТЮР)", "modes": [{ "diameter": "140", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "115, 95", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭИ69", "modes": [{ "diameter": "50", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ЭИ696", "modes": [{ "diameter": "110 ➔ 65(36)", "temp": "1120 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ЭИ698", "modes": [{ "diameter": "140", "temp": "1140 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "115, 95", "temp": "1120 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭИ811 (12Х21Н5Т)", "modes": [{ "diameter": "140, 95", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ЭИ867", "modes": [{ "diameter": "140, 115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "70", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭИ893 (ХН65ВМТЮ)", "modes": [{ "diameter": "140, 115, 95", "temp": "1170 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭИ943", "modes": [{ "diameter": "—", "temp": "интервал 1140-920°C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭИ961 (13Х11Н2В2МФ)", "modes": [{ "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "70", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ЭИ962 (11Х11Н2В2МФ)", "modes": [{ "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "70", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭП164", "modes": [{ "diameter": "160", "temp": "1160 °C", "holding": "15 мин (160)", "twoEnds": "—" }, { "diameter": "75, 70", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ЭП184", "modes": [{ "diameter": "—", "temp": "интервал 1160-950°C", "holding": "15 мин.", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭП199", "modes": [{ "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭП202", "modes": [{ "diameter": "140", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "115, 95", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭП220 (ХН75ВМЮТ)", "modes": [{ "diameter": "110, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭП33", "modes": [{ "diameter": "70, 40", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "60, 50", "temp": "1120 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "65", "temp": "1100 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ЭП410", "modes": [{ "diameter": "140, 120", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ЭП517", "modes": [{ "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "115", "temp": "1170 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭП56 (09Х16Н4Б)", "modes": [{ "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "120, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ЭП567", "modes": [{ "diameter": "140", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "95", "temp": "1140 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ЭП570 (ХН60МЮВТ)", "modes": [{ "diameter": "140, 115, 95", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭП637", "modes": [{ "diameter": "70, 52...45", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ЭП678", "modes": [{ "diameter": "50", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "70", "temp": "—", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ЭП708", "modes": [{ "diameter": "110", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭП718 (ХН45МВТЮБ)", "modes": [{ "diameter": "140, 95", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭП742", "modes": [{ "diameter": "120", "temp": "1140 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭП817", "modes": [{ "diameter": "110, 95", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }, { "diameter": "70", "temp": "1120 °C", "holding": "—", "twoEnds": "—" }] },
+      { "brand": "ЭП914", "modes": [{ "diameter": "110", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭП962", "modes": [{ "diameter": "140", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "115", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }] },
+      { "brand": "ЭП975", "modes": [{ "diameter": "110", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }] }
+    ];
 
     let currentData = JSON.parse(localStorage.getItem('forgePerfectSyncDB')) || defaultData;
 
@@ -884,15 +467,61 @@
                 const imported = JSON.parse(e.target.result);
                 if (Array.isArray(imported)) {
                     if (confirm('Вы уверены, что хотите полностью перезаписать текущую таблицу загруженными данными?')) {
-                        currentData = imported;
+                        
+                        // ПРОВЕРКА ФОРМАТА: Если загружается старый файл (имеет mark вместо brand)
+                        if (imported.length > 0 && imported[0].hasOwnProperty('mark')) {
+                            
+                            currentData = imported.map(item => {
+                                const modes = [];
+                                const parts = item.temp ? item.temp.split('/') : ['—'];
+                                
+                                parts.forEach(part => {
+                                    let cleanPart = part.trim();
+                                    let diameter = '—';
+                                    let temp = '—';
+                                    
+                                    if (cleanPart.includes('(t=')) {
+                                        const tMatch = cleanPart.match(/\(t=([^)]+)\)/);
+                                        if (tMatch) temp = tMatch[1].trim();
+                                        diameter = cleanPart.replace(/\(t=[^)]+\)/, '').replace(/⌀/g, '').trim();
+                                    } 
+                                    else if (cleanPart.includes('—')) {
+                                        const subParts = cleanPart.split('—');
+                                        diameter = subParts[0].replace(/⌀/g, '').trim();
+                                        temp = subParts[1].trim();
+                                    } 
+                                    else {
+                                        diameter = cleanPart.replace(/⌀/g, '').trim();
+                                    }
+                                    
+                                    modes.push({
+                                        diameter: diameter || '—',
+                                        temp: temp || '—',
+                                        holding: item.hold || '—',
+                                        twoEnds: (item.note && item.note.trim()) ? item.note.trim() : '—'
+                                    });
+                                });
+
+                                return {
+                                    brand: item.mark,
+                                    modes: modes
+                                };
+                            });
+                            
+                        } else {
+                            // Если файл уже нового, правильного формата
+                            currentData = imported;
+                        }
+
                         renderTable();
                         filterTable();
                     }
                 } else {
-                    alert('Неверный формат файла!');
+                    alert('Неверный формат файла! Проверьте структуру .json');
                 }
             } catch (err) {
                 alert('Ошибка при чтении файла!');
+                console.error(err);
             }
             event.target.value = '';
         };
