@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Журнал кузнечных работ — GFM SX-16</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            /* Подключение вашего загруженного изображения с наложением легкого затемнения */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('image_a672c2ab-b630-4d28-8731-6bdb503e3de8.png');
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px 12px;
+            min-height: 100vh;
+        }
+
+        /* Полупрозрачный плотный контейнер (эффект матового стекла) для читаемости текста */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(15, 23, 42, 0.85); /* Плотный темный тон, защищающий от яркого фона */
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #ffffff;
+            margin-top: 0;
+            margin-bottom: 25px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+            border-bottom: 3px solid #2ecc71; /* Зеленый акцент под цвет станка */
+            padding-bottom: 15px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            padding: 12px 16px;
+            font-size: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #0f172a;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.6);
+        }
+
+        /* Кнопки управления */
+        .btn {
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-add { background-color: #2ecc71; }
+        .btn-add:hover { background-color: #27ae60; }
+        .btn-export { background-color: #334155; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-export:hover { background-color: #475569; }
+        .btn-import { background-color: #8b5cf6; }
+        .btn-import:hover { background-color: #7c3aed; }
+        
+        .btn-edit { background-color: #3b82f6; padding: 8px 12px; font-size: 14px; border-radius: 6px; }
+        .btn-edit:hover { background-color: #2563eb; }
+        .btn-delete { background-color: #ef4444; padding: 8px 12px; font-size: 14px; border-radius: 6px; }
+        .btn-delete:hover { background-color: #dc2626; }
+        .btn-save { background-color: #2ecc71; width: 100%; font-size: 16px; padding: 14px; justify-content: center; }
+        .btn-cancel { background-color: #64748b; }
+        .btn-extra { background-color: #f97316; font-size: 14px; padding: 10px 12px; margin-top: 8px; width: 100%; justify-content: center; }
+        .btn-extra:hover { background-color: #ea580c; }
+
+        .table-wrapper { 
+            overflow-x: auto; 
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            background: rgba(30, 41, 59, 0.4);
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+        }
+
+        th, td { 
+            text-align: left; 
+            padding: 12px 12px; 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            font-size: 14px; 
+            vertical-align: middle; 
+        }
+
+        th { 
+            background-color: #0f172a; 
+            color: #2ecc71; 
+            font-weight: 700; 
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover { 
+            background-color: rgba(255, 255, 255, 0.04); 
+        }
+        
+        /* Внутренние строки параметров */
+        .sub-row {
+            display: flex;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            min-height: 38px;
+            align-items: center;
+        }
+        .sub-row:last-child {
+            border-bottom: none;
+        }
+        .sub-cell {
+            flex: 1;
+        }
+        .sub-cell.diameter { font-weight: 700; color: #ffffff; }
+        .sub-cell.temp { font-weight: 700; color: #ff9f43; text-shadow: 0 0 3px rgba(255,159,67,0.4); } 
+        .sub-cell.holding { color: #e2e8f0; }
+        .sub-cell.note { font-weight: 500; color: #cbd5e1; }
+
+        /* Модальные окна */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(6px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 10px;
+        }
+        .modal {
+            background: #0f172a;
+            color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 550px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .modal-header {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2ecc71;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; color: #94a3b8; }
+        .input-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
+        .input-icon { position: absolute; left: 10px; font-weight: bold; color: #64748b; font-size: 16px; }
+        
+        .form-control { 
+            width: 100%; 
+            padding: 10px 12px; 
+            background: #1e293b;
+            color: #ffffff;
+            border: 1px solid #475569; 
+            border-radius: 6px; 
+            font-size: 14px; 
+            outline: none; 
+        }
+        .form-control:focus { border-color: #2ecc71; }
+        .form-control.has-icon { padding-left: 28px; }
+        
+        .param-block { background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px dashed #475569; margin-bottom: 12px; position: relative; }
+        .param-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+        .btn-remove-block { position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-weight: bold; font-size: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
+
+        .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+        .no-results { display: none; text-align: center; padding: 30px; color: #94a3b8; font-weight: bold; font-size: 16px; }
+        .actions-cell { display: flex; gap: 6px; justify-content: center; }
+        #fileInput { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📋 Технологические параметры ковки — GFM SX-16</h1>
+    
+    <div class="controls">
+        <input type="text" id="searchInput" class="search-box" placeholder="Поиск по марке, размеру, температуре или примечанию..." autocomplete="off">
+        <button class="btn btn-add" onclick="openAddModal()">➕ Добавить строку</button>
+        <button class="btn btn-export" onclick="exportDatabase()">💾 Скачать базу</button>
+        <button class="btn btn-import" onclick="document.getElementById('fileInput').click()">📂 Загрузить базу</button>
+        
+        <input type="file" id="fileInput" onchange="importDatabase(event)">
+    </div>
+
+    <div class="table-wrapper">
+        <table id="forgeTable">
+            <thead>
+                <tr>
+                    <th style="width: 4%; text-align: center;">№</th>
+                    <th style="width: 22%">Марка металла</th>
+                    <th style="width: 26%">Диаметр заготовки</th>
+                    <th style="width: 18%">Температура ковки</th>
+                    <th style="width: 14%">Выдержка</th>
+                    <th style="width: 11%">Примечание</th>
+                    <th style="width: 5%; text-align: center;">Действия</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                </tbody>
+        </table>
+    </div>
+    
+    <div id="noResults" class="no-results">Совпадений не найдено</div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <div class="modal-header" id="modalTitle">Редактирование параметров</div>
+        <input type="hidden" id="editRowIndex">
+        
+        <div class="form-group">
+            <label for="metalBrand">Марка металла</label>
+            <input type="text" id="metalBrand" class="form-control" placeholder="Например: ХН70ВМТЮ, ЭИ961">
+        </div>
+
+        <div class="form-group">
+            <label>Параметры обработки для каждого размера</label>
+            <div id="paramsContainer"></div>
+            <button type="button" class="btn btn-extra" onclick="addParamBlock('', '', '—', '—')">➕ Добавить диаметр и режимы</button>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn btn-cancel" onclick="closeModal()">Отмена</button>
+            <button class="btn btn-save" onclick="saveData()">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Начальная база данных
+    const defaultData = [
+  {
+    "brand": "08Х14Н5М2О (ЭИ712)",
+    "modes": [{ "diameter": "90 ➔ 70ок", "temp": "1160 °C", "holding": "выд. 20 мин.", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "08Х15Н5Д2Т-Ш (ЭП410-Ш)",
+    "modes": [{ "diameter": "120, 95", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "08Х18Н6АГ10С",
+    "modes": [{ "diameter": "150", "temp": "1160 °C", "holding": "10 мин.", "twoEnds": "—" }]
+  },
+  {
+    "brand": "10Х11Н23Т3МР (ЭП33)",
+    "modes": [
+      { "diameter": "140, 90", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "70", "temp": "1120 °C", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "10Х17Н13М2Т",
+    "modes": [{ "diameter": "100 ➔ 73(52)", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "10Х18Н9",
+    "modes": [{ "diameter": "65", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "12Х13",
+    "modes": [{ "diameter": "65", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "12Х18Н10Т",
+    "modes": [
+      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "14Х17Н2 (ЭИ268)",
+    "modes": [{ "diameter": "120, 115", "temp": "1170 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "15Х12Н2МВФ (ЭП517)",
+    "modes": [
+      { "diameter": "140, 115", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" },
+      { "diameter": "95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" },
+      { "diameter": "70", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }
+    ]
+  },
+  {
+    "brand": "18ХГТ",
+    "modes": [
+      { "diameter": "120", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "140", "temp": "1170 °C", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "20Х",
+    "modes": [{ "diameter": "65", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "20Х13",
+    "modes": [
+      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "25Х12Н2В2МФ (ЭИ962)",
+    "modes": [
+      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" },
+      { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }
+    ]
+  },
+  {
+    "brand": "27КХ",
+    "modes": [{ "diameter": "65", "temp": "1100 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "29НК",
+    "modes": [{ "diameter": "130", "temp": "1160 °C", "holding": "40 мин.", "twoEnds": "—" }]
+  },
+  {
+    "brand": "30ХГСА",
+    "modes": [
+      { "diameter": "90", "temp": "1160 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "115", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "32НКД",
+    "modes": [{ "diameter": "130", "temp": "1160 °C", "holding": "40 мин.", "twoEnds": "—" }]
+  },
+  {
+    "brand": "36Н",
+    "modes": [{ "diameter": "65", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "37Х12Н8Г8МФ (ЭИ481)",
+    "modes": [{ "diameter": "155 ➔ 120 ➔ 90", "temp": "1200 °C", "holding": "выд. 15 мин.", "twoEnds": "—" }]
+  },
+  {
+    "brand": "38Х2МЮА",
+    "modes": [{ "diameter": "50", "temp": "1170 °C", "holding": "25 мин.", "twoEnds": "—" }]
+  },
+  {
+    "brand": "40Х",
+    "modes": [{ "diameter": "70, 60, 32", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "40ХН2МА",
+    "modes": [{ "diameter": "70", "temp": "1180 °C", "holding": "15–20 мин.", "twoEnds": "—" }]
+  },
+  {
+    "brand": "43КОФ",
+    "modes": [{ "diameter": "—", "temp": "интервал 1120-880°C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "45",
+    "modes": [{ "diameter": "80", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "47НД",
+    "modes": [
+      { "diameter": "80", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "140 ➔ 100(20)", "temp": "1150 °C", "holding": "выд. 20 мин.", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "49КФ",
+    "modes": [
+      { "diameter": "65", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "110 ➔ 65(31)", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "50Н",
+    "modes": [{ "diameter": "—", "temp": "интервал 1100-850°C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "5ХНМ",
+    "modes": [{ "diameter": "115", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "60С2А",
+    "modes": [{ "diameter": "65", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "65Г",
+    "modes": [{ "diameter": "80", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "9Х1",
+    "modes": [{ "diameter": "115", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "БрОФ7-0.2 (Бронза)",
+    "modes": [{ "diameter": "100➔80; 100➔90; 88➔70", "temp": "400 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ВТ1-0",
+    "modes": [{ "diameter": "60 ➔ 30(12)", "temp": "—", "holding": "40 мин.", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ВТ14",
+    "modes": [{ "diameter": "140➔115; 115➔90(21)", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ВТ16",
+    "modes": [{ "diameter": "140➔115; 115➔90(21)", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ВТ20",
+    "modes": [{ "diameter": "50", "temp": "нет данных", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ВТ22",
+    "modes": [{ "diameter": "140➔115; 115➔90(24)", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ВТ3",
+    "modes": [{ "diameter": "100➔70ок; 115➔87ок", "temp": "—", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ВТ3-1",
+    "modes": [{ "diameter": "60...65", "temp": "нет данных", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ВТ5 / ВТ5-1",
+    "modes": [{ "diameter": "140, 65", "temp": "нет данных", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ВТ6",
+    "modes": [{ "diameter": "120➔95➔65(35,20); 170➔150➔120➔95/100ок", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ВТ6 (Модуль-Т)",
+    "modes": [{ "diameter": "115 ➔ 90 ➔ 62", "temp": "1000 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ВТ8",
+    "modes": [{ "diameter": "115➔90; 140➔115", "temp": "—", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ВТ9",
+    "modes": [{ "diameter": "140 ➔ 110", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "МН19ВП",
+    "modes": [{ "diameter": "140", "temp": "900 °C", "holding": "10 мин.", "twoEnds": "—" }]
+  },
+  {
+    "brand": "МНК",
+    "modes": [{ "diameter": "75", "temp": "800 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "НМЖМц28-2.5-1.5",
+    "modes": [{ "diameter": "65", "temp": "1020 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "НММц38-2В",
+    "modes": [{ "diameter": "140, 70, 65", "temp": "1020 °C", "holding": "10 мин.", "twoEnds": "—" }]
+  },
+  {
+    "brand": "НП2Э",
+    "modes": [{ "diameter": "150 ➔ 105(75)", "temp": "1100 °C", "holding": "выд. 10 мин.", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ОТ4",
+    "modes": [{ "diameter": "135", "temp": "нет данных", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ОТ4-0",
+    "modes": [{ "diameter": "140➔115; 115➔90(21)", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ОТ4-1",
+    "modes": [{ "diameter": "140 ➔ 110(23)", "temp": "—", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ПТ-1М",
+    "modes": [{ "diameter": "140➔90; 110➔65(36)", "temp": "—", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ПТ-3В",
+    "modes": [{ "diameter": "150...155 ➔ 120 ➔ 95(65)", "temp": "—", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ПТ-7М",
+    "modes": [{ "diameter": "115➔90(21); 140➔115", "temp": "—", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "Р6М5",
+    "modes": [
+      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" },
+      { "diameter": "115", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }
+    ]
+  },
+  {
+    "brand": "У8А",
+    "modes": [{ "diameter": "65", "temp": "1120 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "Х12МФ",
+    "modes": [
+      { "diameter": "130", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" },
+      { "diameter": "90", "temp": "1140 °C", "holding": "—", "twoEnds": "на 2 конца" }
+    ]
+  },
+  {
+    "brand": "Х18Н10Т",
+    "modes": [{ "diameter": "120", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "Х20Н80",
+    "modes": [
+      { "diameter": "140, 95", "temp": "1180 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "70", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "ХН32Т (УР.ПР)",
+    "modes": [{ "diameter": "65 ➔ 30±1ок", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ХН35ВТ (УР.ПР)",
+    "modes": [{ "diameter": "65 ➔ 32(30)", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ХН45Ю",
+    "modes": [{ "diameter": "65", "temp": "нет данных", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ХН50ВМТЮБ",
+    "modes": [{ "diameter": "110➔20(34); 110➔70(37)", "temp": "1200 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ХН60ВТ",
+    "modes": [{ "diameter": "140, 70", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ХН62ВМЮТ (ЭИ867)",
+    "modes": [
+      { "diameter": "140", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" },
+      { "diameter": "115, 95", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }
+    ]
+  },
+  {
+    "brand": "ХН67МВТЮ (ЭП202)",
+    "modes": [{ "diameter": "140, 115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ХН70ВМТЮ",
+    "modes": [{ "diameter": "120 ➔ 90 ➔ 65(33)", "temp": "1170 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ХН70ВМТЮБ",
+    "modes": [{ "diameter": "—", "temp": "интервал 1150-900°C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ХН70Ю",
+    "modes": [{ "diameter": "50", "temp": "нет данных", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ХН73МБТЮ (ЭП698)",
+    "modes": [{ "diameter": "110", "temp": "1140 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ХН77ТЮР",
+    "modes": [{ "diameter": "—", "temp": "интервал 1180-950°C", "holding": "15 мин (145)", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ХН78Т",
+    "modes": [{ "diameter": "70", "temp": "нет данных", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ЧИНХТЮ",
+    "modes": [{ "diameter": "90 ➔ 65(25)", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ШХ15",
+    "modes": [
+      { "diameter": "140", "temp": "1160 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "115", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "ШХ15-В",
+    "modes": [{ "diameter": "65", "temp": "1140 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ЭИ435 (ХН78Т)",
+    "modes": [
+      { "diameter": "140, 95", "temp": "1180 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "120", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "ЭИ437Б (ХН77ТЮР)",
+    "modes": [
+      { "diameter": "140", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" },
+      { "diameter": "115, 95", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }
+    ]
+  },
+  {
+    "brand": "ЭИ69",
+    "modes": [{ "diameter": "50", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ЭИ696",
+    "modes": [{ "diameter": "110 ➔ 65(36)", "temp": "1120 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ЭИ698",
+    "modes": [
+      { "diameter": "140", "temp": "1140 °C", "holding": "—", "twoEnds": "на 2 конца" },
+      { "diameter": "115, 95", "temp": "1120 °C", "holding": "—", "twoEnds": "на 2 конца" }
+    ]
+  },
+  {
+    "brand": "ЭИ811 (12Х21Н5Т)",
+    "modes": [{ "diameter": "140, 95", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ЭИ867",
+    "modes": [
+      { "diameter": "140, 115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" },
+      { "diameter": "70", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }
+    ]
+  },
+  {
+    "brand": "ЭИ893 (ХН65ВМТЮ)",
+    "modes": [{ "diameter": "140, 115, 95", "temp": "1170 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ЭИ943",
+    "modes": [{ "diameter": "—", "temp": "интервал 1140-920°C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ЭИ961 (13Х11Н2В2МФ)",
+    "modes": [
+      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "70", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "ЭИ962 (11Х11Н2В2МФ)",
+    "modes": [
+      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" },
+      { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" },
+      { "diameter": "70", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }
+    ]
+  },
+  {
+    "brand": "ЭП164",
+    "modes": [
+      { "diameter": "160", "temp": "1160 °C", "holding": "15 мин (160)", "twoEnds": "—" },
+      { "diameter": "75, 70", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "ЭП184",
+    "modes": [{ "diameter": "—", "temp": "интервал 1160-950°C", "holding": "15 мин.", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ЭП199",
+    "modes": [
+      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" },
+      { "diameter": "115, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }
+    ]
+  },
+  {
+    "brand": "ЭП202",
+    "modes": [
+      { "diameter": "140", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" },
+      { "diameter": "115, 95", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }
+    ]
+  },
+  {
+    "brand": "ЭП220 (ХН75ВМЮТ)",
+    "modes": [{ "diameter": "110, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ЭП33",
+    "modes": [
+      { "diameter": "70, 40", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "60, 50", "temp": "1120 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "65", "temp": "1100 °C", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "ЭП410",
+    "modes": [{ "diameter": "140, 120", "temp": "1180 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ЭП517",
+    "modes": [
+      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" },
+      { "diameter": "115", "temp": "1170 °C", "holding": "—", "twoEnds": "на 2 конца" }
+    ]
+  },
+  {
+    "brand": "ЭП56 (09Х16Н4Б)",
+    "modes": [
+      { "diameter": "140", "temp": "1180 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "120, 95", "temp": "1160 °C", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "ЭП567",
+    "modes": [
+      { "diameter": "140", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "95", "temp": "1140 °C", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "ЭП570 (ХН60МЮВТ)",
+    "modes": [{ "diameter": "140, 115, 95", "temp": "1180 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ЭП637",
+    "modes": [{ "diameter": "70, 52...45", "temp": "1150 °C", "holding": "—", "twoEnds": "—" }]
+  },
+  {
+    "brand": "ЭП678",
+    "modes": [
+      { "diameter": "50", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "70", "temp": "—", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "ЭП708",
+    "modes": [{ "diameter": "110", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ЭП718 (ХН45МВТЮБ)",
+    "modes": [{ "diameter": "140, 95", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ЭП742",
+    "modes": [{ "diameter": "120", "temp": "1140 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ЭП817",
+    "modes": [
+      { "diameter": "110, 95", "temp": "1150 °C", "holding": "—", "twoEnds": "—" },
+      { "diameter": "70", "temp": "1120 °C", "holding": "—", "twoEnds": "—" }
+    ]
+  },
+  {
+    "brand": "ЭП914",
+    "modes": [{ "diameter": "110", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ЭП962",
+    "modes": [{ "diameter": "140", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }, { "diameter": "115", "temp": "1150 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  },
+  {
+    "brand": "ЭП975",
+    "modes": [{ "diameter": "110", "temp": "1160 °C", "holding": "—", "twoEnds": "на 2 конца" }]
+  }
+];
+
+    let currentData = JSON.parse(localStorage.getItem('forgePerfectSyncDB')) || defaultData;
+
+    const tableBody = document.getElementById('tableBody');
+    const searchInput = document.getElementById('searchInput');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const noResults = document.getElementById('noResults');
+    const paramsContainer = document.getElementById('paramsContainer');
+
+    function renderTable() {
+        tableBody.innerHTML = '';
+        currentData.sort((a, b) => a.brand.localeCompare(b.brand));
+
+        currentData.forEach((row, index) => {
+            const tr = document.createElement('tr');
+            
+            let diametersHTML = '';
+            let tempsHTML = '';
+            let holdingsHTML = '';
+            let notesHTML = '';
+            
+            row.modes.forEach(mode => {
+                const hasArrow = mode.diameter.includes('➔') || mode.diameter.includes('—');
+                const displayDiam = (mode.diameter && mode.diameter !== '—' && !hasArrow) ? `⌀ ${mode.diameter}` : mode.diameter;
+                
+                diametersHTML += `<div class="sub-row"><div class="sub-cell diameter">${displayDiam}</div></div>`;
+                tempsHTML += `<div class="sub-row"><div class="sub-cell temp">${mode.temp}</div></div>`;
+                holdingsHTML += `<div class="sub-row"><div class="sub-cell holding">${mode.holding}</div></div>`;
+                notesHTML += `<div class="sub-row"><div class="sub-cell note">${mode.twoEnds}</div></div>`;
+            });
+
+            tr.innerHTML = `
+                <td style="color: #cbd5e1; font-weight: bold; text-align: center;">${index + 1}</td>
+                <td style="font-weight: 600; color: #ffffff;">${row.brand}</td>
+                <td style="padding: 0;">${diametersHTML}</td>
+                <td style="padding: 0;">${tempsHTML}</td>
+                <td style="padding: 0;">${holdingsHTML}</td>
+                <td style="padding: 0;">${notesHTML}</td>
+                <td class="actions-cell">
+                    <button class="btn btn-edit" onclick="openEditModal(${index})">📝</button>
+                    <button class="btn btn-delete" onclick="deleteEntry(${index})">✕</button>
+                </td>
+            `;
+            tableBody.appendChild(tr);
+        });
+        localStorage.setItem('forgePerfectSyncDB', JSON.stringify(currentData));
+    }
+
+    window.exportDatabase = function() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentData, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "forge_unified_base.json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    };
+
+    window.importDatabase = function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const imported = JSON.parse(e.target.result);
+                if (Array.isArray(imported)) {
+                    if (confirm('Вы уверены, что хотите полностью перезаписать текущую таблицу загруженными данными?')) {
+                        currentData = imported;
+                        renderTable();
+                        filterTable();
+                    }
+                } else {
+                    alert('Неверный формат файла!');
+                }
+            } catch (err) {
+                alert('Ошибка при чтении файла!');
+            }
+            event.target.value = '';
+        };
+        reader.readAsText(file);
+    };
+
+    window.addParamBlock = function(diam = '', temp = '', hold = '—', note = '—') {
+        const div = document.createElement('div');
+        div.className = 'param-block';
+        
+        const noteSelectHTML = `
+            <select class="form-control block-note">
+                <option value="—" ${note === '—' ? 'selected' : ''}>—</option>
+                <option value="на 2 конца" ${note === 'на 2 конца' ? 'selected' : ''}>на 2 конца</option>
+            </select>
+        `;
+
+        div.innerHTML = `
+            <button type="button" class="btn-remove-block" onclick="removeParamBlock(this)">✕</button>
+            <div class="param-grid">
+                <div>
+                    <label>Диаметр</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">⌀</span>
+                        <input type="text" class="form-control has-icon block-diameter" placeholder="Напр: 140" value="${diam}">
+                    </div>
+                </div>
+                <div>
+                    <label>Температура</label>
+                    <input type="text" class="form-control block-temperature" placeholder="Напр: 1180" value="${temp}">
+                </div>
+            </div>
+            <div class="param-grid">
+                <div>
+                    <label>Выдержка</label>
+                    <input type="text" class="form-control block-holding" placeholder="Напр: 20 мин." value="${hold}">
+                </div>
+                <div>
+                    <label>Примечание</label>
+                    ${noteSelectHTML}
+                </div>
+            </div>
+        `;
+        paramsContainer.appendChild(div);
+    };
+
+    window.removeParamBlock = function(btn) {
+        if (paramsContainer.querySelectorAll('.param-block').length > 1) {
+            btn.parentElement.remove();
+        } else {
+            alert('У марки должен быть хотя бы один режим!');
+        }
+    };
+
+    window.openEditModal = function(index) {
+        const row = currentData[index];
+        document.getElementById('modalTitle').innerText = "📝 Редактирование режимов ковки";
+        document.getElementById('editRowIndex').value = index;
+        document.getElementById('metalBrand').value = row.brand;
+        
+        paramsContainer.innerHTML = '';
+        row.modes.forEach(mode => {
+            const cleanTemp = mode.temp.replace(' °C', '');
+            addParamBlock(mode.diameter, cleanTemp, mode.holding, mode.twoEnds);
+        });
+        
+        modalOverlay.style.display = 'flex';
+    };
+
+    window.openAddModal = function() {
+        document.getElementById('modalTitle').innerText = "➕ Добавить новую марку";
+        document.getElementById('editRowIndex').value = '-1';
+        document.getElementById('metalBrand').value = '';
+        
+        paramsContainer.innerHTML = ''; 
+        addParamBlock('', '', '—', '—'); 
+        modalOverlay.style.display = 'flex';
+    };
+
+    window.closeModal = function() {
+        modalOverlay.style.display = 'none';
+    };
+
+    window.saveData = function() {
+        const index = parseInt(document.getElementById('editRowIndex').value);
+        const brand = document.getElementById('metalBrand').value.trim();
+
+        if (!brand) {
+            alert('Пожалуйста, укажите марку металла!');
+            return;
+        }
+
+        const blockElements = paramsContainer.querySelectorAll('.param-block');
+        const modes = [];
+
+        blockElements.forEach(el => {
+            const diameter = el.querySelector('.block-diameter').value.trim() || '—';
+            let temp = el.querySelector('.block-temperature').value.trim();
+            const holding = el.querySelector('.block-holding').value.trim() || '—';
+            const twoEnds = el.querySelector('.block-note').value;
+            
+            if (temp && !temp.includes('°C') && !temp.includes('интервал')) {
+                temp = `${temp} °C`;
+            } else if (!temp) {
+                temp = '—';
+            }
+            modes.push({ diameter, temp, holding, twoEnds });
+        });
+
+        const rowData = { brand, modes };
+
+        if (index === -1) {
+            currentData.push(rowData);
+        } else {
+            currentData[index] = rowData;
+        }
+
+        renderTable();
+        closeModal();
+        filterTable();
+    };
+
+    window.deleteEntry = function(index) {
+        if (confirm(`Удалить марку ${currentData[index].brand}?`)) {
+            currentData.splice(index, 1);
+            renderTable();
+            filterTable();
+        }
+    };
+
+    function filterTable() {
+        const query = searchInput.value.toLowerCase().trim();
+        const rows = tableBody.querySelectorAll('tr');
+        let visibleCount = 0;
+
+        rows.forEach((row) => {
+            const text = row.textContent.toLowerCase();
+            if (text.includes(query)) {
+                row.style.display = '';
+                visibleCount++;
+                row.querySelector('td').textContent = visibleCount;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        noResults.style.display = visibleCount > 0 ? 'none' : 'block';
+    }
+
+    modalOverlay.addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+
+    searchInput.addEventListener('input', filterTable);
+    renderTable();
+</script>
+
+</body>
+</html>
