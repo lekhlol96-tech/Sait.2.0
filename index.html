@@ -11,8 +11,8 @@
         }
         
         body {
-            /* Подключение вашего загруженного изображения с наложением легкого затемнения */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('image_a672c2ab-b630-4d28-8731-6bdb503e3de8.png');
+            /* Фоновое изображение с легким общим затемнением */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('image_a672c2ab-b630-4d28-8731-6bdb503e3de8.png');
             background-size: cover;
             background-position: center center;
             background-attachment: fixed;
@@ -23,17 +23,17 @@
             min-height: 100vh;
         }
 
-        /* Полупрозрачный плотный контейнер (эффект матового стекла) для читаемости текста */
+        /* Основной контейнер стал более прозрачным (0.55 вместо 0.85) */
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: rgba(15, 23, 42, 0.85); /* Плотный темный тон, защищающий от яркого фона */
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            background: rgba(15, 23, 42, 0.55); 
+            backdrop-filter: blur(8px); /* Умеренное размытие, чтобы фон угадывался лучше */
+            -webkit-backdrop-filter: blur(8px);
             padding: 25px;
             border-radius: 16px;
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         h1 {
@@ -45,7 +45,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             text-shadow: 0 2px 8px rgba(0,0,0,0.8);
-            border-bottom: 3px solid #2ecc71; /* Зеленый акцент под цвет станка */
+            border-bottom: 3px solid #2ecc71;
             padding-bottom: 15px;
         }
 
@@ -62,7 +62,7 @@
             min-width: 280px;
             padding: 12px 16px;
             font-size: 15px;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.9);
             color: #0f172a;
             border: none;
             border-radius: 8px;
@@ -77,7 +77,7 @@
             box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.6);
         }
 
-        /* Кнопки управления */
+        /* Кнопки */
         .btn {
             padding: 12px 20px;
             font-size: 14px;
@@ -99,15 +99,11 @@
             box-shadow: 0 6px 12px rgba(0,0,0,0.4);
         }
 
-        .btn:active {
-            transform: translateY(1px);
-        }
-
         .btn-add { background-color: #2ecc71; }
         .btn-add:hover { background-color: #27ae60; }
-        .btn-export { background-color: #334155; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-export { background-color: rgba(51, 65, 85, 0.8); border: 1px solid rgba(255,255,255,0.1); }
         .btn-export:hover { background-color: #475569; }
-        .btn-import { background-color: #8b5cf6; }
+        .btn-import { background-color: rgba(139, 92, 246, 0.8); }
         .btn-import:hover { background-color: #7c3aed; }
         
         .btn-edit { background-color: #3b82f6; padding: 8px 12px; font-size: 14px; border-radius: 6px; }
@@ -117,13 +113,13 @@
         .btn-save { background-color: #2ecc71; width: 100%; font-size: 16px; padding: 14px; justify-content: center; }
         .btn-cancel { background-color: #64748b; }
         .btn-extra { background-color: #f97316; font-size: 14px; padding: 10px 12px; margin-top: 8px; width: 100%; justify-content: center; }
-        .btn-extra:hover { background-color: #ea580c; }
 
+        /* Подложка таблицы теперь максимально прозрачная */
         .table-wrapper { 
             overflow-x: auto; 
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-            background: rgba(30, 41, 59, 0.4);
+            background: rgba(15, 23, 42, 0.35); 
         }
 
         table { 
@@ -134,13 +130,14 @@
         th, td { 
             text-align: left; 
             padding: 12px 12px; 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
+            border: 1px solid rgba(255, 255, 255, 0.12); 
             font-size: 14px; 
             vertical-align: middle; 
         }
 
+        /* Шапка таблицы слегка затемнена для контраста */
         th { 
-            background-color: #0f172a; 
+            background-color: rgba(15, 23, 42, 0.75); 
             color: #2ecc71; 
             font-weight: 700; 
             text-transform: uppercase;
@@ -148,15 +145,15 @@
             letter-spacing: 0.5px;
         }
 
+        /* Строки при наведении становятся чуть плотнее */
         tr:hover { 
-            background-color: rgba(255, 255, 255, 0.04); 
+            background-color: rgba(255, 255, 255, 0.08); 
         }
         
-        /* Внутренние строки параметров */
         .sub-row {
             display: flex;
             padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             min-height: 38px;
             align-items: center;
         }
@@ -166,10 +163,10 @@
         .sub-cell {
             flex: 1;
         }
-        .sub-cell.diameter { font-weight: 700; color: #ffffff; }
-        .sub-cell.temp { font-weight: 700; color: #ff9f43; text-shadow: 0 0 3px rgba(255,159,67,0.4); } 
-        .sub-cell.holding { color: #e2e8f0; }
-        .sub-cell.note { font-weight: 500; color: #cbd5e1; }
+        .sub-cell.diameter { font-weight: 700; color: #ffffff; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
+        .sub-cell.temp { font-weight: 700; color: #ff9f43; text-shadow: 0 1px 5px rgba(0,0,0,0.8); } 
+        .sub-cell.holding { color: #e2e8f0; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
+        .sub-cell.note { font-weight: 500; color: #cbd5e1; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
 
         /* Модальные окна */
         .modal-overlay {
@@ -226,7 +223,7 @@
         
         .param-block { background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px dashed #475569; margin-bottom: 12px; position: relative; }
         .param-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
-        .btn-remove-block { position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-weight: bold; font-size: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
+        .btn-remove-block { position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-weight: bold; font-size: 12px; display: flex; align-items: center; justify-content: center; }
 
         .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
         .no-results { display: none; text-align: center; padding: 30px; color: #94a3b8; font-weight: bold; font-size: 16px; }
@@ -293,7 +290,7 @@
 </div>
 
 <script>
-    // Начальная база данных
+    // Подключение вашей актуальной базы данных
     const defaultData = [
   {
     "brand": "08Х14Н5М2О (ЭИ712)",
@@ -852,7 +849,7 @@
 
             tr.innerHTML = `
                 <td style="color: #cbd5e1; font-weight: bold; text-align: center;">${index + 1}</td>
-                <td style="font-weight: 600; color: #ffffff;">${row.brand}</td>
+                <td style="font-weight: 600; color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">${row.brand}</td>
                 <td style="padding: 0;">${diametersHTML}</td>
                 <td style="padding: 0;">${tempsHTML}</td>
                 <td style="padding: 0;">${holdingsHTML}</td>
